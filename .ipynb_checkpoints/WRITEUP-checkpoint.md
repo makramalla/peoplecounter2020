@@ -1,3 +1,26 @@
+Hello,
+
+I am still for of actually finishing this project, but I am bit stuck on both files, and feel I need some feedback to carry on.
+
+Would appreciate if you can go through both python files and see if I am in the wrong direction.
+
+Additionally I have some questions:
+- I don't understand "load the model network into a self.net_plugin variable portion in loading the model
+- What do I do with the request id in the asynchronous function, (I saw it in one of the exercises) 
+- I am not sure how I can locate a non-trained model so I used one from openvino from now, would appreciate your guidance in searching for other alternatives. I used https://docs.openvinotoolkit.org/2019_R1/_person_detection_retail_0013_description_person_detection_retail_0013.html
+- How do I calculate the duration? I think I am missing a key element
+
+Thanks you!!
+
+
+
+
+
+
+
+
+
+
 # Project Write-Up
 
 You can use this document as a template for providing your project write-up. However, if you

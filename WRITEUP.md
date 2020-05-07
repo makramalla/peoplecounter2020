@@ -12,7 +12,30 @@ Additionally I have some questions:
 
 Thanks you!!
 
+Second Submission:
 
+I used https://docs.openvinotoolkit.org/2019_R1/person-detection-retail-0002.html
+
+To convert the model:
+
+cd /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader
+
+./downloader.py --name person-detection-retail-0002 -o /home/workspace
+
+Source Framework is Caffee
+
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model squeezenet_v1.1.caffemodel --input_proto deploy.prototxt
+
+Alternative:
+
+I found these models as recomended by one of my colleagues:https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+
+
+wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+tar -xvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+
+
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json
 
 
 

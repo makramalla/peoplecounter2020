@@ -69,9 +69,10 @@ class Network:
             
         
         ### TODO: Add any necessary extensions ###
+        ''' CPU extension not supported
         if cpu_extension and "CPU" in device:
             self.plugin.add_extension(cpu_extension, device)
-            
+        '''   
         ### TODO: Return the loaded inference plugin ###
         
         return
@@ -83,7 +84,7 @@ class Network:
         return self.network.inputs[self.input_blob].shape
         
 
-    def exec_net(self, request_id=0, network_input):
+    def exec_net(self, request_id, network_input):
         ### TODO: Start an asynchronous request ###
         self.infer_request_handle = self.exec_network.start_async(
                 request_id, 

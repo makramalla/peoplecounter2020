@@ -100,30 +100,41 @@ def infer_on_stream(args, client):
     
     
     ### TODO: Handle the input stream ###
-    cap = cv2.VideoCapture(args.i)
-    cap.open(args.i)
+
+    stream = args.i
+    
+    
+    if stream == 'CAM':
+        stream = 0
+        
+    elif stream.endwith('png'):
+        print 'This is an image'
+        exit()
+        
+    elif stream.endwith('mp4')
+        print 'this is a video file'
+    
+    else:
+        print 'Error loading input'
+        exit()
+        
+    
+    
+    cap = cv2.VideoCapture(stream)
+    cap.open(stream)
     width = int(cap.get(3))
     height = int(cap.get(4))
     
     
     
     ### TODO: Loop until stream is over ###
-    """People Counter Outputs:
-    
-    The net outputs blob with shape: [1, 1, N, 7], where N is the number of detected bounding boxes. For each detection, the description has the format: [image_id, label, conf, x_min, y_min, x_max, y_max]
-image_id - ID of the image in the batch
-label - predicted class ID
-conf - confidence for the predicted class
-(x_min, y_min) - coordinates of the top left bounding box corner
-(x_max, y_max) - coordinates of the bottom right bounding box corner.
 
-."""
     
     overallcounter = 0
     tempcounter = 0
     current_count =0
     new_person = True
-    
+    duration = 0
     
     
     while cap.isOpened():
@@ -162,15 +173,15 @@ conf - confidence for the predicted class
                 current_count = tempcounter
                 overallcounter = overallcounter + tempcounter
                 tempcounter = 0
-                duration += 1
+                duration = time.time()
                 
             elif tempcounter < current_count:
                 #people left the frame
-                duration = 0
+                duration = time.time() - duration
                 current_count = tempcounter
             else
                 if tempcounter != 0:
-                    duration +=1
+                    print 'Do nothing for now'
         
                  
             ### TODO: Calculate and send relevant information on ###

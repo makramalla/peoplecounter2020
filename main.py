@@ -94,7 +94,7 @@ def infer_on_stream(args, client):
     
     CPU_EXTENSION = "/opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so"
     
-    infer_network.load_model(model, args.d, CPU_EXTENSIO)
+    infer_network.load_model(args.model, args.device, CPU_EXTENSION)
     net_shape = infer_network = infer_network.get_input_shape()
     
     
@@ -108,14 +108,14 @@ def infer_on_stream(args, client):
         stream = 0
         
     elif stream.endwith('png'):
-        print 'This is an image'
+        print ('This is an image')        
         exit()
         
-    elif stream.endwith('mp4')
-        print 'this is a video file'
+    elif stream.endwith('mp4'):
+        print ('This is video file')
     
     else:
-        print 'Error loading input'
+        print ('Error loading file')
         exit()
         
     
@@ -158,7 +158,7 @@ def infer_on_stream(args, client):
             result  = infer_network.get_output()
             
             ### TODO: Extract any desired stats from the results ###
-            conf = result(0,0,:,2)
+            conf = result[0,0,:,2]
             for i, c in enumerate(conf):
                 if c > args.pt:
                     tempcounter  = i
@@ -179,9 +179,9 @@ def infer_on_stream(args, client):
                 #people left the frame
                 duration = time.time() - duration
                 current_count = tempcounter
-            else
+            else:
                 if tempcounter != 0:
-                    print 'Do nothing for now'
+                    print ('Do nothing for now')
         
                  
             ### TODO: Calculate and send relevant information on ###

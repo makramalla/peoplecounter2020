@@ -60,8 +60,8 @@ class Network:
         self.output_blob = next(iter(self.network.outputs))
         
         ### TODO: Check for supported layers ###
-        supported_layers = plugin.query_network(network=net, device_name="CPU")
-        unsupported_layers = [l for l in net.layers.keys() if l not in supported_layers]
+        supported_layers = self.plugin.query_network(self.network, device_name="CPU")
+        unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
         if len(unsupported_layers) != 0:
             print("Unsupported layers found: {}".format(unsupported_layers))
             print("Check whether extensions are available to add to IECore.")

@@ -1,23 +1,14 @@
 Hello,
 
+I am still not clear on how to search for untrained models.
 
-Second Submission:
+I found these models that one of my colleagues used:
+https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+Not sure if this is correct or not but i will use it to carry on.
 
-I used https://docs.openvinotoolkit.org/2019_R1/person-detection-retail-0002.html
-
-To convert the model:
-
-cd /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader
-
-./downloader.py --name person-detection-retail-0002 -o /home/workspace
-
-Source Framework is Caffee
-
-python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model squeezenet_v1.1.caffemodel --input_proto deploy.prototxt
-
-Alternative:
-
-I found these models as recomended by one of my colleagues:https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+Important note: I found this model on the following github repo:
+https://github.com/prateeksawhney97/People-Counter-Application-Using-Intel-OpenVINO-Toolkit
+I can safely assume that this is a project submission as well. I did not try to copy or recreate any of my colleagues efforts, which I believe is clear in my submission. 
 
 
 wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
@@ -27,12 +18,32 @@ tar -xvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json
 
 
-Questions:
+Which brings me to the next question, how do I compare models?
+Does this happen before or after the processing.
+What are my metrics and how to obtain them?
+
+
+I have updated the main and inferense python based on the previous recommendation. (Thank you)
+
+Running the code (after running three other terminals) gets the following error:
+
+(venv) root@d73d0c526396:/home/workspace# python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m frozen_inference_graph.xml -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.7 | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 1280x720 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+[rawvideo @ 0x1b40d80] Invalid buffer size, packet size 130 < expected frame_size 2764800
+Error while decoding stream #0:0: Invalid argument
+Output file is empty, nothing was encoded (check -ss / -t / -frames parameters if used)
+
+
+Further recommendations would be really appreciated
+Thanks
 
 
 
 
 
+
+
+
+The next section will be finalized when i am more confident about my submission.
 
 
 # Project Write-Up

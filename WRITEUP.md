@@ -2,25 +2,20 @@ Hello,
 
 I am still not clear on how to search for untrained models.
 
-I found these models that one of my colleagues used:
+I found these models:
 https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
-Not sure if this is correct or not but i will use it to carry on.
-
-Important note: I found this model on the following github repo:
-https://github.com/prateeksawhney97/People-Counter-Application-Using-Intel-OpenVINO-Toolkit
-I can safely assume that this is a project submission as well. I did not try to copy or recreate any of my colleagues efforts, which I believe is clear in my submission. 
 
 
-wget http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
+wget http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz
 tar -xvf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 
 
-python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model faster_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_v2_coco_2018_01_28/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model ssd_mobilenet_v2_coco_2018_03_29/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config ssd_mobilenet_v2_coco_2018_03_29/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_support.json
 
 
 Which brings me to the next question, how do I compare models?
-Does this happen before or after the processing.
-What are my metrics and how to obtain them?
+The answers I found in the knowlede platform are unclear.
+How do I  obtain these metrics
 
 
 I have updated the main and inferense python based on the previous recommendation. (Thank you)

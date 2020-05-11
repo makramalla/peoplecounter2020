@@ -51,7 +51,7 @@ class Network:
         model_bin = os.path.splitext(model_xml)[0] + ".bin"
         
         # Initialize the plugin
-        self.plugin = IECore()
+        self.plugin = IEPlugin(device=device)
         # Read the IR as a IENetwork
         self.network = IENetwork(model=model_xml, weights=model_bin)
         

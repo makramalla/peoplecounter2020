@@ -57,6 +57,9 @@ A simple comparison between the models are the following:
 | faster_rcnn      | 58         | 143         | 53             |
 | ssd_mobilenet_v2 | 31         | 57          | 67             |
 | sd_mobilenet_v1  | 30         | 39          | 27             |
+
+
+
 I will be using the ssd_mobilenet_v2 model since due to its effectivenss and due to several recomendations
 
 ## Assess Model Use Cases
@@ -73,10 +76,23 @@ deployed edge model. The potential effects of each of these are as follows...
 
 
 
-NOTE:
-To run the application run the follwoing after runngin the MQTT server in other terminals:
+## Running the project
+To run the application run the follwoing after running the MQTT server in other terminals:
 
 
+```
+#1st terminal
+cd webservice/server/node-server
+node ./server.js
+
+#2nd terminal
+cd webservice/ui
+npm run dev
+
+#3rd terminal
+sudo ffserver -f ./ffmpeg/server.conf
+
+#4th terminal
 source /opt/intel/openvino/bin/setupvars.sh -py
 
 

@@ -52,12 +52,11 @@ python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model 
 
 A simple comparison between the models are the following:
 
-| Model              |  Speed (ms)          | Ex Time (s)  | File Size (Mb) |
-| -------------      |:-------------:| -----:| -----:|-----:|
-| faster_rcnn        | 58 | 143.38| 53 |
-| ssd_mobilenet_v2      | 31      |   57 |  67 | 
-| ssd_mobilenet_v1 | 30     |    39 |    27 | 
-
+| Model            | Speed (ms) | Ex Time (s) | File Size (Mb) |
+|------------------|------------|-------------|----------------|
+| faster_rcnn      | 58         | 143         | 53             |
+| ssd_mobilenet_v2 | 31         | 57          | 67             |
+| sd_mobilenet_v1  | 30         | 39          | 27             |
 I will be using the ssd_mobilenet_v2 model since due to its effectivenss and due to several recomendations
 
 ## Assess Model Use Cases

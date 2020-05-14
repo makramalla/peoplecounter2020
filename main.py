@@ -148,7 +148,7 @@ def infer_on_stream(args, client):
         p_frame = cv2.resize(frame, (net_input_shape[3], net_input_shape[2]))
         p_frame = p_frame.transpose((2,0,1))
         p_frame = p_frame.reshape(1, *p_frame.shape)
-        print ('I am herez')    
+        print ('I am here')    
         
         ### TODO: Start asynchronous inference for specified request ###
         infer_network.exec_net(p_frame)

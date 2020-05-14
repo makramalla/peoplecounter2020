@@ -52,32 +52,54 @@ python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model 
 
 A simple comparison between the models are the following:
 
-| Model              |  Speed (ms)          | Ex Time (s)  | File Size (Mb) |
-| -------------      |:-------------:| -----:| -----:|-----:|
-| faster_rcnn        | 58 | 143.38| 53 |
-| ssd_mobilenet_v2      | 31      |   57 |  67 | 
-| ssd_mobilenet_v1 | 30     |    39 |    27 | 
+| Model            | Speed (ms) | Ex Time (s) | File Size (Mb) |
+|------------------|------------|-------------|----------------|
+| faster_rcnn      | 58         | 143         | 53             |
+| ssd_mobilenet_v2 | 31         | 57          | 67             |
+| sd_mobilenet_v1  | 30         | 39          | 27             |
+
+
 
 I will be using the ssd_mobilenet_v2 model since due to its effectivenss and due to several recomendations
 
 ## Assess Model Use Cases
 
 The use case for a people counter app could be useful in several cases. 
-- You could generall count the people that are in a building
-- You can gather metrics about certain behaviour or habits of people visiting a certain location (a mall or a workplace)
-- You can gather insights about people engagement for certain topics compared to others in conferneces.
+- You could generall count the people that are in a building. This could potentially help in limiting the number of people in a certain area, especially during the current convid situation
+- You can gather metrics about certain behaviour or habits of people visiting a certain location (a mall or a workplace). Accordingly you wouild be able make some rearrangment to provide the best user experience.
+- You can gather insights about people engagement for certain topics compared to others in conferneces. That way, you would be able to poinpoint the general interests of the public and thus direct research and projects towards that.
+
+
+
 
 ## Assess Effects on End User Needs
 
 Lighting, model accuracy, and camera focal length/image size have different effects on a
-deployed edge model. The potential effects of each of these are as follows...
+deployed edge model. The potential effects of each of these are as follows:
+
+- the lighting can influence the edge model on counting the people in frame. With certain angles the model can mistakenly ignore a person in the frame (or give it a lower confidence level) due to missing charectersitcs 
+- The image size can infuence the overall processing. If the image size is too large, the edge compute might need more time to process the frame and thus exhaust mroe resources. A lower sized image can influence the accuracy of the output and thus jeopardize the project
+- model accuracy is proportional to compute power and memory consumption. The higher the model accuracy, the more resoureces it would potentially need. I believe this is more dependant on the use case. If a high accuracy is a must, then using more computational power should be tolerated. In a more relaxed enviroment without need for precision, it is acceptable aim for a lower accuracy to save on resources for other applications.
 
 
 
-NOTE:
-To run the application run the follwoing after runngin the MQTT server in other terminals:
+## Running the project
+To run the application run the follwoing after running the MQTT server in other terminals:
 
 
+```
+#1st terminal
+cd webservice/server/node-server
+node ./server.js
+
+#2nd terminal
+cd webservice/ui
+npm run dev
+
+#3rd terminal
+sudo ffserver -f ./ffmpeg/server.conf
+
+#4th terminal
 source /opt/intel/openvino/bin/setupvars.sh -py
 
 

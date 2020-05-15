@@ -86,7 +86,7 @@ def infer_on_stream(args, client):
     # Initialise the class
     infer_network = Network()
     # Set Probability threshold for detections
-    prob_threshold = args.prob_threshold
+    
     model = args.model
     
     
@@ -109,7 +109,7 @@ def infer_on_stream(args, client):
         exit()
         
     elif stream.endswith('mp4'):
-        print ('This is video file')
+        pass
     
     else:
         print ('Error loading file')
@@ -118,8 +118,8 @@ def infer_on_stream(args, client):
     
     cap = cv2.VideoCapture(stream)
     cap.open(stream)
-    w = int(cap.get(3))
-    h = int(cap.get(4))
+    width = int(cap.get(3))
+    height = int(cap.get(4))
 
     
 
@@ -128,8 +128,12 @@ def infer_on_stream(args, client):
     overallcounter = 0
     tempcounter = 0
     current_count =0
+    prev_counter = 0
     new_person = True
     duration = 0
+    counter_threshold = 0
+    people_in_frame = False
+    new_person = True
     
     
     ### TODO: Loop until stream is over ###
@@ -144,43 +148,59 @@ def infer_on_stream(args, client):
         p_frame = cv2.resize(frame, (network_shape['image_tensor'][3], network_shape['image_tensor'][2]))
         p_frame = p_frame.transpose((2,0,1))
         p_frame = p_frame.reshape(1, *p_frame.shape)
-        print ('I am here')    
+           
         
         net_input = {'image_tensor': p_frame,'image_info': p_frame.shape[1:]}
         ### TODO: Start asynchronous inference for specified request ###
         infer_network.exec_net(net_input, request_id = 0)
         ### TODO: Wait for the result ###
         if infer_network.wait() == 0:
+            
             ### TODO: Get the results of the inference request ###
             result  = infer_network.get_output()
-            
+            tempcounter = 0
             ### TODO: Extract any desired stats from the results ###
             conf = result[0,0,:,2]
-            for i, c in enumerate(conf):
-                if c > 0.4:
-                    tempcounter  = i
-                    new_person = False
-                    box = result[0, 0, i, 3:]
-                    p1 = (int(box[0] * w), int(box[1] * h))
-                    p2 = (int(box[2] * w), int(box[3] * h))
-                    frame = cv2.rectangle(frame, p1, p2, (0, 255, 0), 3)
-            
-            if tempcounter > current_count:
-                #people just appeared in frame
-                current_count = tempcounter
-                overallcounter = overallcounter + tempcounter
-                tempcounter = 0
-                duration = time.time()
+            for i, c in enumerate(conf): 
                 
-            elif tempcounter < current_count:
-                #people left the frame
-                duration = time.time() - duration
-                current_count = tempcounter
-            else:
-                if tempcounter != 0:
-                    print ('Do nothing for now')
-        
+                if c > args.prob_threshold:
+                    people_in_frame = True
+                    tempcounter = i + 1
 
+                    box = result[0, 0, i, 3:]
+                    p1 = (int(box[0] * width), int(box[1] * height))
+                    p2 = (int(box[2] * width), int(box[3] * height))
+                    frame = cv2.rectangle(frame, p1, p2, (148,0,211), 3)
+
+                    
+                    if new_person:
+                            new_person = False
+                            overallcounter = overallcounter + tempcounter
+                            prev_counter = tempcounter
+                            
+
+                    else:
+                        #counter_threshold = 0
+                        if new_person:
+                            new_person = False
+                            overallcounter = overallcounter + tempcounter
+                            duration = time.time()
+
+                        if people_in_frame:
+                            current_count = tempcounter
+                            people_in_frame = False
+                            prev_counter = current_count
+                            duration = time.time() - duration
+
+            if prev_counter != tempcounter:
+                counter_threshold += 1
+            else:
+                counter_threshold = 0  
+            
+            if counter_threshold > 5:
+                new_person = True
+                prev_counter = tempcounter
+            
             ### TODO: Calculate and send relevant information on ###
             ### current_count, total_count and duration to the MQTT server ###
             ### Topic "person": keys of "count" and "total" ###
@@ -189,8 +209,11 @@ def infer_on_stream(args, client):
                            payload=json.dumps({
                                'count': current_count, 'total': overallcounter}),
                            qos=0, retain=False)
-            if duration is not None:
-                client.publish('person/duration',
+            
+            current_count = 0
+            
+            
+            client.publish('person/duration',
                                payload=json.dumps({'duration': duration}),
                                qos=0, retain=False)
  
